@@ -93,10 +93,10 @@ class QuestionsIdentifier:
         return questionArray
 
 
-def main(arg):
+def main(msg):
     FILE = 'basebloom.xlsx'
 
-    files_ms_client.download(arg["file"]["name"], FILE, url="http://" + FILES_SERVER)
+    files_ms_client.download(msg["file"]["name"], FILE, url="http://" + FILES_SERVER)
     df = pd.read_excel(FILE)
     df.sample(frac=1)
 
@@ -107,7 +107,7 @@ def main(arg):
     dataset = df.copy()
     sentences = dataset.Question.values
 
-    QI = QuestionsIdentifier(arg)
+    QI = QuestionsIdentifier(msg)
     QI.have_GPU()
     QI.configure_NLTK()
     QI.set_training()
@@ -121,3 +121,5 @@ def main(arg):
     qdataframe.to_excel("output.xlsx",
                     sheet_name='questions',
                     index=False)  
+    
+    msg["echo-file"] = files_ms_client.upload("output.xlsx", url="http://" + FILES_SERVER)
