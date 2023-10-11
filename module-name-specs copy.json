@@ -1,0 +1,25 @@
+{
+  "id": "question-identifier",
+  "name": "Question Identifier",
+  "description": "Receives a text and returns the questions found",
+  "author": "Gilson Fonseca",
+  "email": "gilson@ice.ufjf.br",
+  "input_queue": "question-identifier-python-in",
+  "output_queue": "question-identifier-python-out",
+  "input": [
+    {
+      "id": "input-file",
+      "link": true,
+      "type": "file",
+      "required": true
+    }
+  ],
+  "output": [
+    {
+      "id": "input-file",
+      "link": true,
+      "type": "file",
+      "required": true
+    }
+  ]
+}
