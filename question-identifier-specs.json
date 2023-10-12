@@ -16,7 +16,7 @@
   ],
   "output": [
     {
-      "id": "output-file",
+      "id": "qi-output",
       "link": true,
       "type": "file",
       "required": true
