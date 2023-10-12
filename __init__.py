@@ -4,19 +4,20 @@ import re
 import nltk
 import time
 import pandas as pd
+import numpy as np
 import files_ms_client
 import tensorflow as tf
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.metrics import classification_report
+from ast import literal_eval
 
 
 FILES_SERVER = os.environ.get("FILES_SERVER", "200.17.70.211:10162")
 
 class QuestionsIdentifier:
     
-    def __init__(self, specs):        
-        self.specs = specs
+    def __init__(self):
         self.gb = GradientBoostingClassifier(n_estimators = 400, random_state=0)
         self.vectorizer = TfidfVectorizer(ngram_range=(1,3), 
                                     min_df=0.001, 
@@ -94,18 +95,13 @@ class QuestionsIdentifier:
 
 
 def main(msg):
-    file = files_ms_client.download(msg["file"]["name"], url="http://" + FILES_SERVER)
-    df = pd.read_excel(file)
-    df.sample(frac=1)
+    transcript = files_ms_client.download(msg["file"]["name"], url="http://" + FILES_SERVER, buffer=True)
 
-    # Remove os dados N/A da base, assim como tabelas não usadas
-    df = df.dropna()
+    transcript_dict = literal_eval(transcript.decode('utf-8'))
 
-    # Recebe df
-    dataset = df.copy()
-    sentences = dataset.Question.values
+    sentences = np.array(list(transcript_dict.values()))
 
-    QI = QuestionsIdentifier(msg)
+    QI = QuestionsIdentifier()
     QI.have_GPU()
     QI.configure_NLTK()
     QI.set_training()
@@ -120,4 +116,5 @@ def main(msg):
                     sheet_name='questions',
                     index=False)  
     
-    msg["echo-file"] = files_ms_client.upload("output.xlsx", url="http://" + FILES_SERVER)
+    msg["qi-output"] = files_ms_client.upload("output.xlsx", url="http://" + FILES_SERVER)
+    return msg
