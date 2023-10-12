@@ -5,7 +5,7 @@ import os
 
 
 # Load module specs
-f = open('module-name-specs.json')
+f = open('question-identifier-specs.json')
 specs = json.load(f)
 
 # Set enviroment configs up. Default values can be changed by altering

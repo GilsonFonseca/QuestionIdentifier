@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "id": "Pipeline Gilson",
+  "name": "Pipeline completo do Gilson",
+  "description": "Dado um vídeo, define sua classificação na taxonomia de Bloom",
+  "input": [
+    {
+      "id": "video",
+      "name": "Video",
+      "description": "Video to go trough modules",
+      "type": "file",
+      "required": true,
+      "accept": ["video/mp4"]
+    }
+  ],
+  "output": [
+    {
+      "id": "ae",
+      "from": "audio-extractor:audio",
+      "type": "file",
+      "name": "Audio Extractor Result",
+      "description": "The result of the Audio Extractor processing"
+    },
+    {
+      "id": "vad",
+      "from": "vad:vad-output",
+      "type": "file",
+      "name": "Voice Activity Detector Result",
+      "description": "The result of the Voice Activity Detector processing"
+    },
+    {
+      "id": "asr",
+      "from": "asr:asr",
+      "type": "file",
+      "name": "ASR Result",
+      "description": "The result of the ASR processing"
+    },
+    {
+      "id": "qi",
+      "from": "qi:qi-output",
+      "type": "file",
+      "name": "Question Identifier Result",
+      "description": "Result of the Question Identifier processing"
+    },
+    {
+      "id": "cbloom",
+      "from": "cbloom:cbloom-output",
+      "type": "file",
+      "name": "Bloom Classification Result",
+      "description": "The result of the Bloom Classification processing"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "audio-extractor",
+      "queues": ["audio_extractor_in", "audio_extractor_out"],
+      "arguments": { "file": "video" },
+      "output": ["audio"]
+    },
+    {
+      "id": "vad",
+      "queues": ["vad_in", "vad_out"],
+      "arguments": { "file": "audio-extractor:audio" },
+      "output": ["vad-output"]
+    },
+    {
+      "id": "asr",
+      "queues": ["asr_in", "asr_out"],
+      "arguments": { "file": "vad:vad-output" },
+      "output": ["asr"]
+    },
+    {
+      "id": "qi",
+      "queues": ["question-identifier-python-in", "question-identifier-python-out"],
+      "arguments": { "file": "asr:asr" },
+      "output": ["qi-output"]
+    },
+    {
+      "id": "cbloom",
+      "queues": ["cbloom_in", "cbloom_out"],
+      "arguments": { "file": "qi:qi-output" },
+      "output": ["cbloom-output"]
+    }
+  ]
+}

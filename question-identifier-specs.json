@@ -16,7 +16,7 @@
   ],
   "output": [
     {
-      "id": "input-file",
+      "id": "output-file",
       "link": true,
       "type": "file",
       "required": true

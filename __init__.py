@@ -94,10 +94,8 @@ class QuestionsIdentifier:
 
 
 def main(msg):
-    FILE = 'basebloom.xlsx'
-
-    files_ms_client.download(msg["file"]["name"], FILE, url="http://" + FILES_SERVER)
-    df = pd.read_excel(FILE)
+    file = files_ms_client.download(msg["file"]["name"], url="http://" + FILES_SERVER)
+    df = pd.read_excel(file)
     df.sample(frac=1)
 
     # Remove os dados N/A da base, assim como tabelas não usadas
