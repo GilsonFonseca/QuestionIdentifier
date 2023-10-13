@@ -4,8 +4,8 @@
   "description": "Receives a text and returns the questions found",
   "author": "Gilson Fonseca",
   "email": "gilson@ice.ufjf.br",
-  "input_queue": "question-identifier-python-in",
-  "output_queue": "question-identifier-python-out",
+  "input_queue": "question-identifier-in",
+  "output_queue": "question-identifier-out",
   "input": [
     {
       "id": "input-file",
